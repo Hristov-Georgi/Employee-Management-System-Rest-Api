@@ -4,11 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
-
-/**
- * Used to create employees.
- */
-
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "employees")
@@ -24,17 +21,20 @@ public class Employee {
     @Column(nullable = false, length = 50)
     private String lastName;
 
+    @Column(nullable = false)
+    private BigDecimal salary;
+
     @ManyToOne
     private Department department;
 
     @ManyToOne
     private Position position;
 
-    @Column(nullable = false)
-    private BigDecimal salary;
-
     @ManyToOne
     private Status status;
+
+    @ManyToMany
+    private Set<Role> roles;
 
     public Employee() {
     }
@@ -47,6 +47,7 @@ public class Employee {
         this.position = position;
         this.salary = salary;
         this.status = status;
+        this.roles = new HashSet<>();
     }
 
     public String getId() {
@@ -103,6 +104,14 @@ public class Employee {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
 }
