@@ -1,3 +1,30 @@
 spring:
   application:
     name: employeemanagementsystem
+
+#DB
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/employee_management_system
+    username:
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    properties:
+      hibernate:
+        format-sql: true
+
+#Loggers
+  logging:
+    level:
+      org:
+      hibernate:
+      SQL: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
+      orm.jdbc.bind: TRACE
+
+
+#JWT
