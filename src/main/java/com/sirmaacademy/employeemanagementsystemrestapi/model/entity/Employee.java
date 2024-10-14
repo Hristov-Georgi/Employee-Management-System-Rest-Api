@@ -25,6 +25,9 @@ public class Employee {
     @Column(nullable = false, length = 50)
     private String lastName;
 
+    @Column(nullable = false, length = 10)
+    private Integer personalIdNumber;
+
     @Column(nullable = false)
     private BigDecimal salary;
 
@@ -44,11 +47,13 @@ public class Employee {
         this.roles = new HashSet<>();
     }
 
-    public Employee(String firstName, String middleName, String lastName, Department department, Position position,
+    public Employee(String firstName, String middleName, String lastName, Integer personalIdNumber,
+                    Department department, Position position,
                     BigDecimal salary, Set<Role> roles) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
+        this.personalIdNumber = personalIdNumber;
         this.department = department;
         this.position = position;
         this.salary = salary;
@@ -128,4 +133,11 @@ public class Employee {
         this.roles = roles;
     }
 
+    public Integer getPersonalIdNumber() {
+        return personalIdNumber;
+    }
+
+    public void setPersonalIdNumber(Integer personalIdNumber) {
+        this.personalIdNumber = personalIdNumber;
+    }
 }
