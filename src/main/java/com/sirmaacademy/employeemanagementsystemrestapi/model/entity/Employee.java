@@ -1,10 +1,10 @@
 package com.sirmaacademy.employeemanagementsystemrestapi.model.entity;
 
+import com.sirmaacademy.employeemanagementsystemrestapi.model.enums.Status;
 import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +18,9 @@ public class Employee {
 
     @Column(nullable = false, length = 50)
     private String firstName;
+
+    @Column(nullable = false, length = 50)
+    private String middleName;
 
     @Column(nullable = false, length = 50)
     private String lastName;
@@ -41,9 +44,10 @@ public class Employee {
         this.roles = new HashSet<>();
     }
 
-    public Employee(String firstName, String lastName, Department department, Position position,
+    public Employee(String firstName, String middleName, String lastName, Department department, Position position,
                     BigDecimal salary, Set<Role> roles) {
         this.firstName = firstName;
+        this.middleName = middleName;
         this.lastName = lastName;
         this.department = department;
         this.position = position;
@@ -66,6 +70,14 @@ public class Employee {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     public String getLastName() {
