@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,30 +25,31 @@ public class Employee {
     @Column(nullable = false)
     private BigDecimal salary;
 
-    @ManyToOne
+    @ManyToOne()
     private Department department;
 
     @ManyToOne
     private Position position;
 
-    @ManyToOne
+    @Enumerated(value = EnumType.STRING)
     private Status status;
 
     @ManyToMany
     private Set<Role> roles;
 
     public Employee() {
+        this.roles = new HashSet<>();
     }
 
     public Employee(String firstName, String lastName, Department department, Position position,
-                    BigDecimal salary, Status status) {
+                    BigDecimal salary, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.department = department;
         this.position = position;
         this.salary = salary;
-        this.status = status;
-        this.roles = new HashSet<>();
+        this.status = Status.ACTIVE;
+        this.roles = roles;
     }
 
     public String getId() {
