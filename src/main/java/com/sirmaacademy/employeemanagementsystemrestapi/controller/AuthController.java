@@ -7,10 +7,8 @@ import com.sirmaacademy.employeemanagementsystemrestapi.exceptions.InvalidRoleEx
 import com.sirmaacademy.employeemanagementsystemrestapi.model.request.EmployeeRegisterRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.request.LoginRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.response.LoginResponse;
-import com.sirmaacademy.employeemanagementsystemrestapi.model.response.RegisteredEmployeeResponse;
 import com.sirmaacademy.employeemanagementsystemrestapi.service.AuthService;
 import com.sirmaacademy.employeemanagementsystemrestapi.service.EmployeeService;
-import com.sirmaacademy.employeemanagementsystemrestapi.service.impl.AuthServiceLogic;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,11 +49,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisteredEmployeeResponse> register(
+    public ResponseEntity<String> register(
             @Valid @RequestBody EmployeeRegisterRequest employeeRegisterRequest) {
 
         try {
-            RegisteredEmployeeResponse response = authService.confirmRegistration(employeeRegisterRequest);
+            String response = authService.confirmRegistration(employeeRegisterRequest);
             return ResponseEntity.ok(response);
         } catch (EmployeeAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee is already in the system.", e);

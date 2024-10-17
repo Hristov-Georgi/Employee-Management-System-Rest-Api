@@ -5,7 +5,6 @@ import com.sirmaacademy.employeemanagementsystemrestapi.model.entity.*;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.request.EmployeeRegisterRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.request.LoginRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.response.LoginResponse;
-import com.sirmaacademy.employeemanagementsystemrestapi.model.response.RegisteredEmployeeResponse;
 import com.sirmaacademy.employeemanagementsystemrestapi.repository.*;
 import com.sirmaacademy.employeemanagementsystemrestapi.service.AuthService;
 import com.sirmaacademy.employeemanagementsystemrestapi.validation.Validate;
@@ -65,7 +64,7 @@ public class AuthServiceLogic implements AuthService {
     }
 
     @Override
-    public RegisteredEmployeeResponse confirmRegistration(EmployeeRegisterRequest employeeRegisterRequest) {
+    public String confirmRegistration(EmployeeRegisterRequest employeeRegisterRequest) {
 
         if (this.employeeRepository.existsByPersonalIdNumber(employeeRegisterRequest.getPersonalIdNumber())) {
             throw new EmployeeAlreadyExistsException(
@@ -89,7 +88,13 @@ public class AuthServiceLogic implements AuthService {
 
         Print.printAccountDetails(account);
 
-        return new RegisteredEmployeeResponse(employee.getId(), employee.getFirstName(), employee.getLastName());
+        return String.format("Employee: %s, %s, %s was successfully registered." +
+                " %s %s account was created successfully.",
+                employee.getFirstName(),
+                employee.getMiddleName(),
+                employee.getLastName(),
+                employee.getFirstName(),
+                employee.getMiddleName());
     }
 
     private Account createEmployeeAccount(Employee employee) {
