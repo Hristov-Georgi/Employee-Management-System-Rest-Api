@@ -1,9 +1,6 @@
 package com.sirmaacademy.employeemanagementsystemrestapi.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Random;
@@ -22,12 +19,16 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
+    @OneToOne
+    private Employee employee;
+
     public Account() {
     }
 
-    public Account(String firstName, String lastName, String password) {
+    public Account(String firstName, String lastName, Employee employee) {
         this.username = buildUsername(firstName, lastName);
-        this.password = password;
+        this.password = getDefaultPassword();
+        this.employee = employee;
     }
 
     public String getId() {
@@ -48,6 +49,18 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    private String getDefaultPassword() {
+        return "12345";
     }
 
     private String buildUsername(String firstName, String lastName) {
