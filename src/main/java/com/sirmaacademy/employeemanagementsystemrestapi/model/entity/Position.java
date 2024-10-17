@@ -16,7 +16,7 @@ public class Position {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "position")
+    @OneToMany
     private Set<Employee> employees;
 
     public Position() {
