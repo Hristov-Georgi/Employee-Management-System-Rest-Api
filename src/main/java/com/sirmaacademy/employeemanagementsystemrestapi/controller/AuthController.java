@@ -1,7 +1,13 @@
 package com.sirmaacademy.employeemanagementsystemrestapi.controller;
 
+import com.sirmaacademy.employeemanagementsystemrestapi.exceptions.EmployeeAlreadyExistsException;
+import com.sirmaacademy.employeemanagementsystemrestapi.exceptions.InvalidDepartmentException;
+import com.sirmaacademy.employeemanagementsystemrestapi.exceptions.InvalidPositionException;
+import com.sirmaacademy.employeemanagementsystemrestapi.exceptions.InvalidRoleException;
+import com.sirmaacademy.employeemanagementsystemrestapi.model.request.EmployeeRegisterRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.request.LoginRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.response.LoginResponse;
+import com.sirmaacademy.employeemanagementsystemrestapi.model.response.RegisteredEmployeeResponse;
 import com.sirmaacademy.employeemanagementsystemrestapi.service.AuthService;
 import com.sirmaacademy.employeemanagementsystemrestapi.service.EmployeeService;
 import com.sirmaacademy.employeemanagementsystemrestapi.service.impl.AuthServiceLogic;
@@ -42,8 +48,28 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Unexpected exception occurred.");
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisteredEmployeeResponse> register(
+            @Valid @RequestBody EmployeeRegisterRequest employeeRegisterRequest) {
+
+        try {
+            RegisteredEmployeeResponse response = authService.confirmRegistration(employeeRegisterRequest);
+            return ResponseEntity.ok(response);
+        } catch (EmployeeAlreadyExistsException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee is already in the system.", e);
+        } catch (InvalidDepartmentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Department.", e);
+        } catch (InvalidPositionException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Position.", e);
+        } catch (InvalidRoleException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Role.", e);
+        }
 
     }
+
+
 
 
 }

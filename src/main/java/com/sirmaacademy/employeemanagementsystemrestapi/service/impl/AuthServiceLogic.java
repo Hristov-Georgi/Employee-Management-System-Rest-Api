@@ -1,11 +1,14 @@
 package com.sirmaacademy.employeemanagementsystemrestapi.service.impl;
 
-import com.sirmaacademy.employeemanagementsystemrestapi.model.entity.Account;
-import com.sirmaacademy.employeemanagementsystemrestapi.model.entity.Role;
+import com.sirmaacademy.employeemanagementsystemrestapi.exceptions.EmployeeAlreadyExistsException;
+import com.sirmaacademy.employeemanagementsystemrestapi.model.entity.*;
+import com.sirmaacademy.employeemanagementsystemrestapi.model.request.EmployeeRegisterRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.request.LoginRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.response.LoginResponse;
-import com.sirmaacademy.employeemanagementsystemrestapi.repository.AccountRepository;
+import com.sirmaacademy.employeemanagementsystemrestapi.model.response.RegisteredEmployeeResponse;
+import com.sirmaacademy.employeemanagementsystemrestapi.repository.*;
 import com.sirmaacademy.employeemanagementsystemrestapi.service.AuthService;
+import com.sirmaacademy.employeemanagementsystemrestapi.validation.Validate;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,13 +25,15 @@ public class AuthServiceLogic implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final AccountRepository accountRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
     public AuthServiceLogic(AuthenticationManager authenticationManager, JwtService jwtService,
-                            AccountRepository accountRepository) {
+                            AccountRepository accountRepository, EmployeeRepository employeeRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.accountRepository = accountRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -43,8 +48,8 @@ public class AuthServiceLogic implements AuthService {
         Account account = accountRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "Username "
-                        + authentication.getName()
-                        + " not found."));
+                                + authentication.getName()
+                                + " not found."));
 
         List<String> roleList = account.getEmployee()
                 .getRoles()
@@ -58,4 +63,37 @@ public class AuthServiceLogic implements AuthService {
                 .setRoles(roleList)
                 .setExpiresIn(jwtService.extractClaim(jwtToken, Claims::getExpiration));
     }
+
+    @Override
+    public RegisteredEmployeeResponse confirmRegistration(EmployeeRegisterRequest employeeRegisterRequest) {
+
+        if (this.employeeRepository.existsByPersonalIdNumber(employeeRegisterRequest.getPersonalIdNumber())) {
+            throw new EmployeeAlreadyExistsException(
+                    "Employee with id: '"
+                            + employeeRegisterRequest.getPersonalIdNumber()
+                            + "' is already registered.");
+        }
+
+        Employee employee = employeeRepository.save(
+                new Employee(
+                employeeRegisterRequest.getFirstName(),
+                employeeRegisterRequest.getMiddleName(),
+                employeeRegisterRequest.getLastName(),
+                employeeRegisterRequest.getPersonalIdNumber(),
+                Validate.department(employeeRegisterRequest.getDepartment()),
+                Validate.position(employeeRegisterRequest.getPosition()),
+                employeeRegisterRequest.getSalary(),
+                Validate.roles(employeeRegisterRequest.getRoles())));
+
+        Account account = accountRepository.save(createEmployeeAccount(employee));
+
+        Print.printAccountDetails(account);
+
+        return new RegisteredEmployeeResponse(employee.getId(), employee.getFirstName(), employee.getLastName());
+    }
+
+    private Account createEmployeeAccount(Employee employee) {
+        return new Account(employee.getFirstName(), employee.getLastName(), employee);
+    }
+
 }
