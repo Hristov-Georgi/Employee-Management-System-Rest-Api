@@ -2,10 +2,8 @@ package com.sirmaacademy.employeemanagementsystemrestapi.service.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecureDigestAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,7 @@ public class JwtService {
     private static final Long THIRTY_SECONDS_IN_MILLIS = 30000L;
 
     @Value("${jwt.security.secret-key}")
-    private String key;
+    private String secret;
 
     @Value("${jwt.security.duration-ms}")
     private Long durationMs;
@@ -64,7 +62,7 @@ public class JwtService {
     }
 
     private SecretKey secretKey() {
-        byte[] key = Decoders.BASE64.decode(this.key);
+        byte[] key = Decoders.BASE64.decode(this.secret);
         return Keys.hmacShaKeyFor(key);
     }
 
