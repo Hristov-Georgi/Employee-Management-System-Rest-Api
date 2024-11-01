@@ -7,5 +7,4 @@ import com.sirmaacademy.employeemanagementsystemrestapi.model.response.LoginResp
 public interface AuthService {
 
     LoginResponse confirmLogin(LoginRequest loginRequest);
-    String confirmRegistration(EmployeeRegisterRequest employeeRegisterRequest);
 }

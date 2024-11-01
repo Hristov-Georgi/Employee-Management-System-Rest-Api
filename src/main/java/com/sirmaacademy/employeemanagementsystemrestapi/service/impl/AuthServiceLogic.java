@@ -63,42 +63,4 @@ public class AuthServiceLogic implements AuthService {
                 .setExpiresIn(jwtService.extractClaim(jwtToken, Claims::getExpiration));
     }
 
-    @Override
-    public String confirmRegistration(EmployeeRegisterRequest employeeRegisterRequest) {
-
-        if (this.employeeRepository.existsByPersonalIdNumber(employeeRegisterRequest.getPersonalIdNumber())) {
-            throw new EmployeeAlreadyExistsException(
-                    "Employee with id: '"
-                            + employeeRegisterRequest.getPersonalIdNumber()
-                            + "' is already registered.");
-        }
-
-        Employee employee = employeeRepository.save(
-                new Employee(
-                employeeRegisterRequest.getFirstName(),
-                employeeRegisterRequest.getMiddleName(),
-                employeeRegisterRequest.getLastName(),
-                employeeRegisterRequest.getPersonalIdNumber(),
-                Validate.department(employeeRegisterRequest.getDepartment()),
-                Validate.position(employeeRegisterRequest.getPosition()),
-                employeeRegisterRequest.getSalary(),
-                Validate.roles(employeeRegisterRequest.getRoles())));
-
-        Account account = accountRepository.save(createEmployeeAccount(employee));
-
-        Print.printAccountDetails(account);
-
-        return String.format("Employee: %s, %s, %s was successfully registered." +
-                " %s %s account was created successfully.",
-                employee.getFirstName(),
-                employee.getMiddleName(),
-                employee.getLastName(),
-                employee.getFirstName(),
-                employee.getMiddleName());
-    }
-
-    private Account createEmployeeAccount(Employee employee) {
-        return new Account(employee.getFirstName(), employee.getLastName(), employee);
-    }
-
 }
