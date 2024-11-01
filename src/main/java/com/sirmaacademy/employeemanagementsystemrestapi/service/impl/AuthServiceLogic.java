@@ -1,13 +1,11 @@
 package com.sirmaacademy.employeemanagementsystemrestapi.service.impl;
 
-import com.sirmaacademy.employeemanagementsystemrestapi.exceptions.EmployeeAlreadyExistsException;
+
 import com.sirmaacademy.employeemanagementsystemrestapi.model.entity.*;
-import com.sirmaacademy.employeemanagementsystemrestapi.model.request.EmployeeRegisterRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.request.LoginRequest;
 import com.sirmaacademy.employeemanagementsystemrestapi.model.response.LoginResponse;
 import com.sirmaacademy.employeemanagementsystemrestapi.repository.*;
 import com.sirmaacademy.employeemanagementsystemrestapi.service.AuthService;
-import com.sirmaacademy.employeemanagementsystemrestapi.validation.Validate;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,15 +22,13 @@ public class AuthServiceLogic implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final AccountRepository accountRepository;
-    private final EmployeeRepository employeeRepository;
 
     @Autowired
     public AuthServiceLogic(AuthenticationManager authenticationManager, JwtService jwtService,
-                            AccountRepository accountRepository, EmployeeRepository employeeRepository) {
+                            AccountRepository accountRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.accountRepository = accountRepository;
-        this.employeeRepository = employeeRepository;
     }
 
     @Override
