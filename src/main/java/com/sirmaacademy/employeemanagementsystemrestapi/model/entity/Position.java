@@ -3,8 +3,6 @@ package com.sirmaacademy.employeemanagementsystemrestapi.model.entity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.Set;
-
 @Entity
 @Table(name = "positions")
 public class Position {
@@ -16,15 +14,11 @@ public class Position {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany
-    private Set<Employee> employees;
-
     public Position() {
     }
 
-    public Position(String name, Set<Employee> employees) {
+    public Position(String name) {
         this.name = name;
-        this.employees = employees;
     }
 
     public String getId() {
@@ -41,14 +35,6 @@ public class Position {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
     }
 
 }
