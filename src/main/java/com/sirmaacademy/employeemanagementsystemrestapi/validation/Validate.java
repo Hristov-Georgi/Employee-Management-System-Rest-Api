@@ -47,12 +47,39 @@ public final class Validate {
                                 + "' does not exist."));
     }
 
-    public static Department department(String departmentName) {
+    public static Department ifDepartmentExist(String departmentName) {
         return departmentRepository.findByNameIgnoreCase(departmentName)
                 .orElseThrow(() -> new InvalidDepartmentException(
                         "Department: '"
                                 + departmentName
                                 + "' does not exist."));
     }
+
+    public static String departmentName(String departmentName) {
+
+        if (departmentName.length() > 50) {
+            throw new InvalidDepartmentException("Department name length is too long (more than 50 symbols).");
+        }
+
+        if (departmentRepository.existsByName(departmentName)) {
+            throw new InvalidDepartmentException("Department '" + departmentName + "' already exists.");
+        }
+
+        for (char s : departmentName.toCharArray()) {
+
+            if (s != 32 && s <= 64
+                || s >= 91 && s <= 96
+                || s >= 123) {
+                throw new IllegalArgumentException("Invalid symbol '"
+                        + s
+                        + "' in department name: '"
+                        + departmentName
+                        + "'.");
+            }
+
+        }
+        return departmentName;
+    }
+
 
 }
