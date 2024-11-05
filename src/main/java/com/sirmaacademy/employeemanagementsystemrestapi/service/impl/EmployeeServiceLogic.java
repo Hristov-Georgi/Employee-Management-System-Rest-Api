@@ -59,7 +59,7 @@ public class EmployeeServiceLogic implements EmployeeService {
                         employeeRegisterRequest.getMiddleName(),
                         employeeRegisterRequest.getLastName(),
                         employeeRegisterRequest.getPersonalIdNumber(),
-                        Validate.department(employeeRegisterRequest.getDepartment()),
+                        Validate.ifDepartmentExist(employeeRegisterRequest.getDepartment()),
                         Validate.position(employeeRegisterRequest.getPosition()),
                         employeeRegisterRequest.getSalary(),
                         Validate.roles(employeeRegisterRequest.getRoles())));
