@@ -4,13 +4,13 @@ public class EmployeeEntityResponse {
 
     private String firstName;
     private String lastName;
-    private String department;
+    private String departmentName;
     private String position;
 
-    public EmployeeEntityResponse(String firstName, String lastName, String department, String position) {
+    public EmployeeEntityResponse(String firstName, String lastName, String departmentName, String position) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.department = department;
+        this.departmentName = departmentName;
         this.position = position;
     }
 
@@ -30,12 +30,12 @@ public class EmployeeEntityResponse {
         this.lastName = lastName;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public String getPosition() {
