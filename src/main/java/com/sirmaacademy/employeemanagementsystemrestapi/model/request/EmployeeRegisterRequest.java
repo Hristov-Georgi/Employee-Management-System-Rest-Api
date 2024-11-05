@@ -39,15 +39,12 @@ public class EmployeeRegisterRequest {
     private String position;
 
     @NotBlank
-    private String status;
-
-    @NotBlank
     @Size(min = 1)
     private Set<String> roles;
 
     public EmployeeRegisterRequest(String firstName, String middleName, String lastName,
                                    Integer personalIdNumber, BigDecimal salary, String department,
-                                   String position, String status, Set<String> roles) {
+                                   String position,Set<String> roles) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -55,7 +52,6 @@ public class EmployeeRegisterRequest {
         this.salary = salary;
         this.department = department;
         this.position = position;
-        this.status = status;
         this.roles = roles;
     }
 
@@ -77,10 +73,6 @@ public class EmployeeRegisterRequest {
 
     public String getPosition() {
         return position;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     public Set<String> getRoles() {
@@ -105,10 +97,6 @@ public class EmployeeRegisterRequest {
 
     public void setPosition(String position) {
         this.position = position;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public void setRoles(Set<String> roles) {
