@@ -36,6 +36,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth", "/").permitAll()
+                        .requestMatchers("/employee/getAllActive").permitAll()//TODO: set permission access >= USER
+                        .requestMatchers("/employee/register").permitAll() //TODO: set permission access >= USER
+                        .requestMatchers("/employee/findBy/**").hasAnyRole("ADMIN", "MODERATOR")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -68,5 +71,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
 }
